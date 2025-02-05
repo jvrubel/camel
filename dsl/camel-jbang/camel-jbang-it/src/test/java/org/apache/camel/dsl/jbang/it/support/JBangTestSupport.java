@@ -105,7 +105,8 @@ public abstract class JBangTestSupport {
         SRC_MAPPING_TEMPLATE("transform.yaml", "/jbang/it/data-mapping/src/transform.yaml"),
         COMP_MAPPING_DATA("data.xml", "/jbang/it/data-mapping/components/data.xml"),
         COMP_MAPPING_TEMPLATE("transform.xml", "/jbang/it/data-mapping/components/transform.xml"),
-        FORMATS_MAPPING_DATA("data.csv", "/jbang/it/data-mapping/data-formats/data.csv");
+        FORMATS_MAPPING_DATA("data.csv", "/jbang/it/data-mapping/data-formats/data.csv"),
+        PIPE_SCRIPT("UpperCase.java", "/jbang/it/UpperCase.java");
 
         private String name;
         private String resPath;
