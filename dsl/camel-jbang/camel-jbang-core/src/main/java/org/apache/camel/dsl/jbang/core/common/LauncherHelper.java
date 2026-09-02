@@ -67,18 +67,27 @@ public final class LauncherHelper {
                     .getCodeSource().getLocation();
             if (location != null) {
                 String urlStr = location.toString();
-                // Handle nested JAR (Spring Boot loader)
+                // Handle Spring Boot 3.x nested JAR scheme: jar:nested:/outer.jar/!inner.jar!/
+                // Extract the outer JAR path (everything before the first /!)
+                if (urlStr.startsWith("jar:nested:")) {
+                    String path = urlStr.substring("jar:nested:".length());
+                    int idx = path.indexOf("/!");
+                    if (idx > 0) {
+                        return URLDecoder.decode(path.substring(0, idx), StandardCharsets.UTF_8);
+                    }
+                }
+                // Handle classic nested JAR (Spring Boot 2.x / shade plugin): jar:file:/outer.jar!/
                 if (urlStr.startsWith("jar:file:")) {
                     int idx = urlStr.indexOf("!/");
                     if (idx > 0) {
-                        String path = urlStr.substring(9, idx);
+                        String path = urlStr.substring("jar:file:".length(), idx);
                         // Decode URL-encoded characters (spaces, special chars)
                         return URLDecoder.decode(path, StandardCharsets.UTF_8);
                     }
                 }
                 // Handle direct file URL
                 if (urlStr.startsWith("file:")) {
-                    String path = urlStr.substring(5);
+                    String path = urlStr.substring("file:".length());
                     return URLDecoder.decode(path, StandardCharsets.UTF_8);
                 }
             }
